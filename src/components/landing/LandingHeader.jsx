@@ -16,6 +16,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     position: "fixed",
     background: theme.palette.primary.white,
+    zIndex: 2
   },
   inner_flex: {
     padding: "30px 50px",
