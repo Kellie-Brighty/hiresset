@@ -5,22 +5,16 @@ import { MdCrueltyFree } from "react-icons/md";
 import { GrRadialSelected } from "react-icons/gr";
 import { BsCircle } from "react-icons/bs";
 import { useNavigate } from "react-router";
+import AuthHeader from "../../components/auth/AuthHeader";
 
 const useStyles = makeStyles((theme) => ({
   container: {},
-  header: {
-    padding: 20,
-  },
-  logo: {
-    width: 150,
-    cursor: "pointer",
-    [theme.breakpoints.down("xs")]: {
-      width: 100
-    }
-  },
   inner_flex: {
     display: "flex",
     justifyContent: "center",
+    [theme.breakpoints.down("xs")]: {
+      marginBottom: "50px"
+    }
   },
   content_box: {
     border: `0.5px solid #ccc`,
@@ -35,23 +29,23 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: 10,
       padding: "20px 10px",
       height: 500,
-      justifyContent: 'space-evenly',
-    }
+      justifyContent: "space-evenly",
+    },
   },
   content_title: {
     fontFamily: "Mirza",
     fontSize: 45,
     textAlign: "center",
     [theme.breakpoints.down("xs")]: {
-      fontSize: 30
-    }
+      fontSize: 25,
+    },
   },
   option_boxes: {
     display: "flex",
     alignItems: "center",
     [theme.breakpoints.down("xs")]: {
-      flexDirection: 'column'
-    }
+      flexDirection: "column",
+    },
   },
   box: {
     border: `0.5px solid #ccc`,
@@ -61,8 +55,8 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     transition: ".2s",
     [theme.breakpoints.down("xs")]: {
-      margin: '10px 0px'
-    }
+      margin: "10px 0px",
+    },
   },
   selected_box: {
     border: `3px solid ${theme.palette.primary.main}`,
@@ -93,6 +87,9 @@ const useStyles = makeStyles((theme) => ({
     width: 200,
     marginTop: 20,
     fontSize: 22,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 18
+    }
   },
   btn_container: {
     display: "flex",
@@ -122,6 +119,9 @@ const useStyles = makeStyles((theme) => ({
   },
   already_container: {
     textAlign: "center",
+    [theme.breakpoints.down("xs")]: {
+      marginTop: 30
+    }
   },
   login_link: {
     color: "blue",
@@ -136,17 +136,10 @@ const AuthChoice = () => {
 
   return (
     <div>
-      <header className={classes.header}>
-        <img
-          src="main-logo.png"
-          alt=""
-          className={classes.logo}
-          onClick={() => navigate("/")}
-        />
-      </header>
+     <AuthHeader />
       <div className={classes.inner_flex}>
         <div className={classes.content_box}>
-          <p className={classes.content_title} >
+          <p className={classes.content_title}>
             Join as a client or freelancer
           </p>
           <div className={classes.option_boxes}>
@@ -195,9 +188,19 @@ const AuthChoice = () => {
 
           <div className={classes.btn_container}>
             {id === "Client" ? (
-              <button className={classes.btn}>Join as a Client</button>
+              <button
+                className={classes.btn}
+                onClick={() => navigate("/client_signup")}
+              >
+                Join as a Client
+              </button>
             ) : id === "Freelancer" ? (
-              <button className={classes.btn}>Apply as a Freelancer</button>
+              <button
+                className={classes.btn}
+                onClick={() => navigate("/talent_signup")}
+              >
+                Apply as a Freelancer
+              </button>
             ) : (
               <button className={classes.btn_unselected}>Create Account</button>
             )}
