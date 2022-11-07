@@ -12,6 +12,9 @@ const useStyles = makeStyles((theme) => ({
   title: {
     fontFamily: "Mirza",
     fontSize: 55,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 25,
+    },
   },
   category_grid: {
     display: "grid",
@@ -19,6 +22,10 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateRows: "repeat(2, 1fr)",
     gridGap: 20,
     marginTop: 20,
+    [theme.breakpoints.down("xs")]: {
+      display: "flex",
+      flexDirection: "column",
+    },
   },
   box: {
     width: 230,
@@ -26,26 +33,30 @@ const useStyles = makeStyles((theme) => ({
     background: "#e3682b29",
     cursor: "pointer",
     transition: ".5s",
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     padding: 10,
     borderRadius: 5,
     "&:hover": {
       background: "#e3682b4d",
       transition: ".5s",
     },
+    [theme.breakpoints.down("xs")]: {
+      width: "100%",
+      padding: 0
+    },
   },
   subs: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    margin: '10px 0px'
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    margin: "10px 0px",
   },
   category_title: {
     fontSize: 15,
-    fontWeight: 'bold'
-  }
+    fontWeight: "bold",
+  },
 }));
 
 const LandingCategories = () => {
@@ -105,8 +116,8 @@ const LandingCategories = () => {
               <div>
                 <p className={classes.category_title}>{category.title}</p>
                 <div className={classes.subs}>
-                    <p>{category.rating}</p>
-                    <p>{category.skiles}skills</p>
+                  <p>{category.rating}</p>
+                  <p>{category.skiles}skills</p>
                 </div>
               </div>
             </div>

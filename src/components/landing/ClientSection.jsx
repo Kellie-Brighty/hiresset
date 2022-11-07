@@ -16,6 +16,12 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     height: 700,
     borderRadius: 10,
+    [theme.breakpoints.down("xs")]: {
+      borderRadius: 0,
+      backgroundPosition: "center top",
+      backgroundSize: "cover",
+      height: 450,
+    },
   },
   overlay: {
     position: "absolute",
@@ -23,32 +29,53 @@ const useStyles = makeStyles((theme) => ({
     left: 0,
     width: "100%",
     height: "100%",
-    background: "#00000058",
+    background: "#00000077",
     borderRadius: 10,
+    [theme.breakpoints.down("xs")]: {
+      borderRadius: 0,
+    },
   },
   content_box: {
     marginLeft: 40,
     marginBottom: 40,
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly'
+    height: "100%",
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    [theme.breakpoints.down("xs")]: {
+      marginLeft: 0,
+      padding: "0px 20px",
+      justifyContent: "space-evenly",
+      marginBottom: 0,
+    },
   },
   client_title: {
     color: theme.palette.primary.white,
     fontSize: 72,
     fontFamily: "Mirza",
     lineHeight: 0.9,
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 30,
+    },
   },
   client_subtitle: {
     color: theme.palette.primary.white,
     width: 350,
     fontWeight: "bold",
+    [theme.breakpoints.down("xs")]: {
+      fontSize: 15,
+      maxWidth: 220,
+    },
   },
   action_boxes: {
     display: "grid",
     gridTemplateColumns: "repeat(4, 1fr)",
     gridGap: 40,
+    [theme.breakpoints.down("xs")]: {
+      display: "flex",
+      flexDirection: "column",
+      gap: 10,
+    },
   },
   box: {
     background: theme.palette.primary.main,
@@ -56,7 +83,6 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 5,
     transition: ".5s",
     cursor: "pointer",
-    width: 350,
     "&:hover": {
       background: theme.palette.primary.white,
       transition: ".5s",
@@ -65,12 +91,23 @@ const useStyles = makeStyles((theme) => ({
         transition: ".5s",
       },
     },
+    [theme.breakpoints.down("xs")]: {
+      padding: 5,
+      width: 200,
+      "& p": {
+        transition: ".5s",
+        fontSize: 12,
+      },
+    },
   },
   box_title: {
     color: theme.palette.primary.white,
     width: 300,
     fontSize: 28,
     fontWeight: "bold",
+    [theme.breakpoints.down("xs")]: {
+      maxWidth: 200,
+    },
   },
   subtitle_container: {
     display: "flex",
@@ -104,7 +141,12 @@ const ClientSection = () => {
                 <p className={classes.box_title}>Post a job and hire a pro</p>
                 <div className={classes.subtitle_container}>
                   <p className={classes.box_subtitle}>Talent Marketplace</p>
-                  <p className={classes.box_subtitle} style={{marginLeft: 10}}>&#8594;</p>
+                  <p
+                    className={classes.box_subtitle}
+                    style={{ marginLeft: 10 }}
+                  >
+                    &#8594;
+                  </p>
                 </div>
               </div>
               <div className={classes.box}>
@@ -113,7 +155,12 @@ const ClientSection = () => {
                 </p>
                 <div className={classes.subtitle_container}>
                   <p className={classes.box_subtitle}>Talent Scout</p>
-                  <p className={classes.box_subtitle} style={{marginLeft: 10}}>&#8594;</p>
+                  <p
+                    className={classes.box_subtitle}
+                    style={{ marginLeft: 10 }}
+                  >
+                    &#8594;
+                  </p>
                 </div>
               </div>
             </div>
