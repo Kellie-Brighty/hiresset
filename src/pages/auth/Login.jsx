@@ -7,6 +7,9 @@ import { BsFillLockFill } from "react-icons/bs";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
 import { useNavigate } from "react-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import db, { auth } from "../../store/server.config";
+import { doc, getDoc } from "firebase/firestore";
 
 const useStyles = makeStyles((theme) => ({
   inner_flex: {
@@ -155,12 +158,41 @@ const useStyles = makeStyles((theme) => ({
     background: theme.palette.primary.white,
     margin: "auto",
   },
+  btn_container: {
+    display: "flex",
+    justifyContent: "center",
+    margin: "20px 0px",
+    padding: "0px 20px",
+  },
+  btn: {
+    padding: "10px 30px",
+    border: "none",
+    background: theme.palette.primary.main,
+    color: theme.palette.primary.white,
+    fontSize: 16,
+    borderRadius: 4,
+    cursor: "pointer",
+    width: "100%",
+  },
+  errors: {
+    color: "red",
+    textAlign: "center",
+    width: 400,
+    margin: "15px auto",
+    [theme.breakpoints.down("xs")]: {
+      width: 300,
+    },
+  },
 }));
 
 const Login = () => {
   const classes = useStyles();
   const [type, setType] = useState("password");
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState(null);
 
   const revealPassword = () => {
     setType("text");
@@ -168,6 +200,48 @@ const Login = () => {
 
   const hidePassword = () => {
     setType("password");
+  };
+
+  const login = () => {
+    setLoading(true);
+    setErrors(null);
+
+    if (email === "" || password === "") {
+      setLoading(false);
+      setErrors("Please, no field should be empty.");
+    } else {
+      try {
+        signInWithEmailAndPassword(auth, email, password)
+          .then(async (usercredentials) => {
+            localStorage.setItem("hiresset_email", email);
+            localStorage.setItem("hiresset_uid", usercredentials.user.uid);
+            const doc_ref = doc(db, "users", email);
+            await getDoc(doc_ref).then((snapshot) => {
+              if (snapshot.data().user_type === "client") {
+                navigate("/client_home");
+              } else {
+                navigate("/talent_home");
+              }
+            });
+          })
+          .catch((err) => {
+            setLoading(false);
+            console.log(err.message);
+            if (err.message === "Firebase: Error (auth/user-not-found).") {
+              setErrors("This email does not exist on Hiresset.");
+            }
+            if (err.message === "Firebase: Error (auth/wrong-password).") {
+              setErrors(
+                "Wrong password. Please check the password and try again."
+              );
+            }
+          });
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        setErrors(err.message);
+      }
+    }
   };
 
   return (
@@ -186,6 +260,11 @@ const Login = () => {
                 type="email"
                 className={classes.input}
                 placeholder="Email address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrors(null);
+                }}
               />
             </div>
 
@@ -195,6 +274,11 @@ const Login = () => {
                 type={type}
                 className={classes.input}
                 placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors(null);
+                }}
               />
               {type === "password" ? (
                 <AiFillEyeInvisible
@@ -220,6 +304,14 @@ const Login = () => {
             </FormGroup>
 
             <p className={classes.forgot_password}>Forgot password?</p>
+          </div>
+
+          {errors && <p className={classes.errors}>{errors}</p>}
+
+          <div className={classes.btn_container}>
+            <button className={classes.btn} onClick={() => login()}>
+              {loading ? "Please wait..." : "Log In"}
+            </button>
           </div>
 
           <div className={classes.divider_container}>

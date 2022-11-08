@@ -1,9 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import AuthHeader from "../../components/auth/AuthHeader";
 import { makeStyles } from "@material-ui/styles";
 import { FcGoogle } from "react-icons/fc";
 import { FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
 import { useNavigate } from "react-router";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import db, {auth} from '../../store/server.config';
+import { setDoc, doc } from "firebase/firestore";
 
 const useStyles = makeStyles((theme) => ({
   inner_flex: {
@@ -174,11 +177,86 @@ const useStyles = makeStyles((theme) => ({
       cursor: "pointer",
     },
   },
+  errors: {
+    color: "red",
+    textAlign: "center",
+    width: 400,
+    margin: "15px auto",
+    [theme.breakpoints.down("xs")]: {
+      width: 300,
+    },
+  },
 }));
 
 const TalentSignup = () => {
   const classes = useStyles();
   const navigate = useNavigate();
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [nationality, setNationality] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState(null);
+  const [termsChecked, setTermsChecked] = useState(false);
+
+  const signup = () => {
+    setLoading(true);
+    setErrors(null);
+
+    if (
+      firstname === "" ||
+      lastname === "" ||
+      email === "" ||
+      password === "" ||
+      nationality === ""
+    ) {
+      setLoading(false);
+      setErrors("Please, no field should be empty.");
+    } else if (termsChecked === false) {
+      setLoading(false);
+      setErrors("Do you not agree with our terms of service?");
+    } else {
+      try {
+        createUserWithEmailAndPassword(auth, email, password)
+          .then(async (usercredentials) => {
+            localStorage.setItem("hiresset_email", email);
+            localStorage.setItem("hiresset_uid", usercredentials.user.uid);
+            await setDoc(doc(db, "users", email), {
+              firstname,
+              lastname,
+              email,
+              nationality,
+              password,
+              uid: usercredentials.user.uid,
+              user_type: "talent",
+            });
+            setLoading(false);
+            navigate("/email_verify", {
+              state: {
+                email,
+                firstname,
+              },
+            });
+          })
+          .catch((err) => {
+            console.log(err.message);
+            setLoading(false);
+            if (
+              err.message === "Firebase: Error (auth/email-already-in-use)."
+            ) {
+              setErrors(
+                "This email already exists. Please sign up using a different one."
+              );
+            }
+          });
+      } catch (err) {
+        console.log(err);
+        setLoading(false);
+        setErrors(err.message);
+      }
+    }
+  };
 
   return (
     <div>
@@ -210,29 +288,54 @@ const TalentSignup = () => {
               type="text"
               className={classes.name_input}
               placeholder="First name"
+              value={firstname}
+              onChange={(e) => {
+                setFirstname(e.target.value);
+                setErrors(null);
+              }}
             />
             <input
               type="text"
               className={classes.name_input}
               placeholder="Last name"
+              value={lastname}
+              onChange={(e) => {
+                setLastname(e.target.value);
+                setErrors(null);
+              }}
             />
           </div>
 
           <div className={classes.other_fields}>
             <input
-              type="text"
+              type="email"
               className={classes.email_password_country}
               placeholder="Email Address"
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                setErrors(null);
+              }}
             />
             <input
-              type="text"
+              type="password"
               className={classes.email_password_country}
               placeholder="Password"
+              value={password}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                setErrors(null);
+              }}
             />
             <input
               type="text"
               className={classes.email_password_country}
               placeholder="Nationality"
+              value={nationality}
+              onChange={(e) => {
+                setNationality(e.target.value);
+                setErrors(null);
+              }}
             />
           </div>
 
@@ -244,7 +347,15 @@ const TalentSignup = () => {
                 className={classes.checkbox}
               />
               <FormControlLabel
-                control={<Checkbox />}
+                control={
+                  <Checkbox
+                    checked={termsChecked}
+                    onChange={() => {
+                      setTermsChecked((prevstate) => !prevstate);
+                      setErrors(null);
+                    }}
+                  />
+                }
                 label="
                 Yes, I understand and agree to the Hiresset Terms of Service."
                 className={classes.checkbox}
@@ -252,12 +363,11 @@ const TalentSignup = () => {
             </FormGroup>
           </div>
 
+          {errors && <p className={classes.errors}>{errors}</p>}
+
           <div className={classes.btn_container}>
-            <button
-              className={classes.btn}
-              onClick={() => navigate("/register-as")}
-            >
-              Create my account
+            <button className={classes.btn} onClick={() => signup()}>
+              {loading ? "Please wait..." : "Create my account"}
             </button>
           </div>
 
