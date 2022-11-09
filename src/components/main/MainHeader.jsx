@@ -60,7 +60,7 @@ const MainHeader = () => {
           className={classes.btn}
           onClick={() => {
             localStorage.clear();
-            navigate("/login");
+            navigate("/logout_success");
           }}
         >
           Log out

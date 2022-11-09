@@ -32,7 +32,10 @@ const ClientHome = () => {
           <div>
             <MainHeader />
             <p>Client Space</p>
-            <p>Welcome, {userData.firstname}</p>
+            <p>
+              Welcome,{" "}
+              {userData.firstname ? userData.firstname : userData.display_name}
+            </p>
           </div>
         )}
       </div>

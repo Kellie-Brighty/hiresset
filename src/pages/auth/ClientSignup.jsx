@@ -4,7 +4,12 @@ import { makeStyles } from "@material-ui/styles";
 import { FcGoogle } from "react-icons/fc";
 import { FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
 import { useNavigate } from "react-router";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import {
+  createUserWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import db, { auth } from "../../store/server.config";
 
@@ -200,7 +205,8 @@ const ClientSignup = () => {
   const [errors, setErrors] = useState(null);
   const [termsChecked, setTermsChecked] = useState(false);
 
-  const signup = () => {
+  const signup = (e) => {
+    e.preventDefault();
     setLoading(true);
     setErrors(null);
 
@@ -222,6 +228,7 @@ const ClientSignup = () => {
           .then(async (usercredentials) => {
             localStorage.setItem("hiresset_email", email);
             localStorage.setItem("hiresset_uid", usercredentials.user.uid);
+            localStorage.setItem("hiresset_user_type", "client");
             await setDoc(doc(db, "users", email), {
               firstname,
               lastname,
@@ -258,6 +265,51 @@ const ClientSignup = () => {
     }
   };
 
+  const googlePopupAuthenticate = async () => {
+    setErrors(null);
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((usercredentials) => {
+        console.log(usercredentials);
+        localStorage.setItem("hiresset_email", usercredentials.user.email);
+        localStorage.setItem("hiresset_uid", usercredentials.user.uid);
+        localStorage.setItem("hiresset_user_type", "client");
+        setDoc(doc(db, "users", usercredentials.user.email), {
+          display_name: usercredentials.user.displayName,
+          email: usercredentials.user.email,
+          uid: usercredentials.user.uid,
+          user_type: "client",
+        });
+        navigate("/email_verify", {
+          state: {
+            email: usercredentials.user.email,
+            firstname: usercredentials.user.displayName,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log(err.message);
+        if (err.message === "Firebase: Error (auth/popup-closed-by-user).") {
+          setErrors("Google Authentication interrupted. Please try again.");
+        }
+      });
+  };
+
+  const googleRedirectAuthenticate = async () => {
+    setErrors(null);
+    const provider = new GoogleAuthProvider();
+    await signInWithRedirect(auth, provider)
+      .then((usercredentials) => {
+        console.log(usercredentials);
+      })
+      .catch((err) => {
+        console.log(err.message);
+        if (err.message === "Firebase: Error (auth/popup-closed-by-user).") {
+          setErrors("Google Authentication interrupted. Please try again.");
+        }
+      });
+  };
+
   return (
     <div>
       <AuthHeader />
@@ -268,7 +320,16 @@ const ClientSignup = () => {
           </div>
 
           <div className={classes.google_btn_container}>
-            <div className={classes.google_btn}>
+            <div
+              className={classes.google_btn}
+              onClick={() => {
+                if (window.innerWidth < 700) {
+                  googleRedirectAuthenticate();
+                } else {
+                  googlePopupAuthenticate();
+                }
+              }}
+            >
               <div className={classes.google_icon_container}>
                 <FcGoogle />
               </div>
@@ -283,93 +344,99 @@ const ClientSignup = () => {
             <div className={classes.divider} />
           </div>
 
-          <div className={classes.name_container}>
-            <input
-              type="text"
-              className={classes.name_input}
-              placeholder="First name"
-              value={firstname}
-              onChange={(e) => {
-                setFirstname(e.target.value);
-                setErrors(null);
-              }}
-            />
-            <input
-              type="text"
-              className={classes.name_input}
-              placeholder="Last name"
-              value={lastname}
-              onChange={(e) => {
-                setLastname(e.target.value);
-                setErrors(null);
-              }}
-            />
-          </div>
-
-          <div className={classes.other_fields}>
-            <input
-              type="email"
-              className={classes.email_password_country}
-              placeholder="Email Address"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-                setErrors(null);
-              }}
-            />
-            <input
-              type="password"
-              className={classes.email_password_country}
-              placeholder="Password"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-                setErrors(null);
-              }}
-            />
-            <input
-              type="text"
-              className={classes.email_password_country}
-              placeholder="Nationality"
-              value={nationality}
-              onChange={(e) => {
-                setNationality(e.target.value);
-                setErrors(null);
-              }}
-            />
-          </div>
-
-          <div className={classes.checkbox_container}>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox sx={{ color: "#e3682b" }} />}
-                label="Send me emails with tips on how to find talent that fits my needs."
-                className={classes.checkbox}
+          <form>
+            <div className={classes.name_container}>
+              <input
+                type="text"
+                className={classes.name_input}
+                placeholder="First name"
+                value={firstname}
+                onChange={(e) => {
+                  setFirstname(e.target.value);
+                  setErrors(null);
+                }}
               />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={termsChecked}
-                    onChange={() => {
-                      setTermsChecked((prevstate) => !prevstate);
-                      setErrors(null);
-                    }}
-                  />
-                }
-                label="
+              <input
+                type="text"
+                className={classes.name_input}
+                placeholder="Last name"
+                value={lastname}
+                onChange={(e) => {
+                  setLastname(e.target.value);
+                  setErrors(null);
+                }}
+              />
+            </div>
+
+            <div className={classes.other_fields}>
+              <input
+                type="email"
+                className={classes.email_password_country}
+                placeholder="Email Address"
+                value={email}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setErrors(null);
+                }}
+              />
+              <input
+                type="password"
+                className={classes.email_password_country}
+                placeholder="Password"
+                value={password}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setErrors(null);
+                }}
+              />
+              <input
+                type="text"
+                className={classes.email_password_country}
+                placeholder="Nationality"
+                value={nationality}
+                onChange={(e) => {
+                  setNationality(e.target.value);
+                  setErrors(null);
+                }}
+              />
+            </div>
+
+            <div className={classes.checkbox_container}>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox sx={{ color: "#e3682b" }} />}
+                  label="Send me emails with tips on how to find talent that fits my needs."
+                  className={classes.checkbox}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={termsChecked}
+                      onChange={() => {
+                        setTermsChecked((prevstate) => !prevstate);
+                        setErrors(null);
+                      }}
+                    />
+                  }
+                  label="
                 Yes, I understand and agree to the Hiresset Terms of Service."
-                className={classes.checkbox}
-              />
-            </FormGroup>
-          </div>
+                  className={classes.checkbox}
+                />
+              </FormGroup>
+            </div>
 
-          {errors && <p className={classes.errors}>{errors}</p>}
+            {errors && <p className={classes.errors}>{errors}</p>}
 
-          <div className={classes.btn_container}>
-            <button className={classes.btn} onClick={() => signup()}>
-              {loading ? "Please wait..." : "Create my account"}
-            </button>
-          </div>
+            <div className={classes.btn_container}>
+              <button
+                type="submit"
+                className={classes.btn}
+                onClick={(e) => signup(e)}
+              >
+                {loading ? "Please wait..." : "Create my account"}
+              </button>
+            </div>
+          </form>
 
           <div className={classes.final_content}>
             <p className={classes.desktop_content}>

@@ -7,7 +7,12 @@ import { BsFillLockFill } from "react-icons/bs";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { FormGroup, FormControlLabel, Checkbox } from "@material-ui/core";
 import { useNavigate } from "react-router";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithRedirect,
+} from "firebase/auth";
 import db, { auth } from "../../store/server.config";
 import { doc, getDoc } from "firebase/firestore";
 
@@ -202,7 +207,8 @@ const Login = () => {
     setType("password");
   };
 
-  const login = () => {
+  const login = (e) => {
+    e.preventDefault();
     setLoading(true);
     setErrors(null);
 
@@ -218,8 +224,10 @@ const Login = () => {
             const doc_ref = doc(db, "users", email);
             await getDoc(doc_ref).then((snapshot) => {
               if (snapshot.data().user_type === "client") {
+                localStorage.setItem("hiresset_user_type", "client");
                 navigate("/client_home");
               } else {
+                localStorage.setItem("hiresset_user_type", "talent");
                 navigate("/talent_home");
               }
             });
@@ -244,6 +252,39 @@ const Login = () => {
     }
   };
 
+  const googlePopupAuthenticate = async () => {
+    setErrors(null);
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then(async (usercredentials) => {
+        console.log(usercredentials);
+        const doc_ref = doc(db, "users", usercredentials.user.email);
+        const querysnapshot = await getDoc(doc_ref);
+        if (querysnapshot.exists()) {
+          localStorage.setItem("hiresset_email", querysnapshot.data().email);
+          localStorage.setItem("hiresset_uid", querysnapshot.data().uid);
+          localStorage.setItem(
+            "hiresset_user_type",
+            querysnapshot.data().user_type
+          );
+          if (querysnapshot.data().user_type === "client") {
+            navigate("/client_home");
+          } else {
+            navigate("/talent_home");
+          }
+        } else {
+          setErrors("No account with this details exists.");
+          usercredentials.user.delete();
+        }
+      })
+      .catch((err) => {
+        console.log(err.message);
+        if (err.message === "Firebase: Error (auth/popup-closed-by-user).") {
+          setErrors("Google Authentication interrupted. Please try again.");
+        }
+      });
+  };
+
   return (
     <div>
       <AuthHeader />
@@ -252,67 +293,72 @@ const Login = () => {
           <div className={classes.title_container}>
             <p className={classes.title}>Log in to Hiresset</p>
           </div>
+          <form>
+            <div className={classes.input_container}>
+              <div className={classes.input_box}>
+                <FaUserAlt />
+                <input
+                  type="email"
+                  className={classes.input}
+                  placeholder="Email address"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setErrors(null);
+                  }}
+                />
+              </div>
 
-          <div className={classes.input_container}>
-            <div className={classes.input_box}>
-              <FaUserAlt />
-              <input
-                type="email"
-                className={classes.input}
-                placeholder="Email address"
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setErrors(null);
-                }}
-              />
+              <div className={classes.input_box}>
+                <BsFillLockFill />
+                <input
+                  type={type}
+                  className={classes.input}
+                  placeholder="Password"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    setErrors(null);
+                  }}
+                />
+                {type === "password" ? (
+                  <AiFillEyeInvisible
+                    onClick={() => revealPassword()}
+                    className={classes.password_toggle}
+                  />
+                ) : (
+                  <AiFillEye
+                    onClick={() => hidePassword()}
+                    className={classes.password_toggle}
+                  />
+                )}
+              </div>
             </div>
 
-            <div className={classes.input_box}>
-              <BsFillLockFill />
-              <input
-                type={type}
-                className={classes.input}
-                placeholder="Password"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  setErrors(null);
-                }}
-              />
-              {type === "password" ? (
-                <AiFillEyeInvisible
-                  onClick={() => revealPassword()}
-                  className={classes.password_toggle}
+            <div className={classes.label_and_forgotpassword}>
+              <FormGroup>
+                <FormControlLabel
+                  control={<Checkbox sx={{ color: "#e3682b" }} />}
+                  label="Keep me logged in"
+                  className={classes.checkbox}
                 />
-              ) : (
-                <AiFillEye
-                  onClick={() => hidePassword()}
-                  className={classes.password_toggle}
-                />
-              )}
+              </FormGroup>
+
+              <p className={classes.forgot_password}>Forgot password?</p>
             </div>
-          </div>
 
-          <div className={classes.label_and_forgotpassword}>
-            <FormGroup>
-              <FormControlLabel
-                control={<Checkbox sx={{ color: "#e3682b" }} />}
-                label="Keep me logged in"
-                className={classes.checkbox}
-              />
-            </FormGroup>
+            {errors && <p className={classes.errors}>{errors}</p>}
 
-            <p className={classes.forgot_password}>Forgot password?</p>
-          </div>
-
-          {errors && <p className={classes.errors}>{errors}</p>}
-
-          <div className={classes.btn_container}>
-            <button className={classes.btn} onClick={() => login()}>
-              {loading ? "Please wait..." : "Log In"}
-            </button>
-          </div>
+            <div className={classes.btn_container}>
+              <button
+                type="submit"
+                className={classes.btn}
+                onClick={(e) => login(e)}
+              >
+                {loading ? "Please wait..." : "Log In"}
+              </button>
+            </div>
+          </form>
 
           <div className={classes.divider_container}>
             <div className={classes.divider} />
@@ -321,7 +367,10 @@ const Login = () => {
           </div>
 
           <div className={classes.google_btn_container}>
-            <div className={classes.google_btn}>
+            <div
+              className={classes.google_btn}
+              onClick={() => googlePopupAuthenticate()}
+            >
               <div className={classes.google_icon_container}>
                 <FcGoogle />
               </div>

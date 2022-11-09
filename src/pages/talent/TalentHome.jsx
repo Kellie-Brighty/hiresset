@@ -32,7 +32,10 @@ const TalentHome = () => {
           <div>
             <MainHeader />
             <p>Talent Space</p>
-            <p>Welcome, {userData.firstname}</p>
+            <p>
+              Welcome,{" "}
+              {userData.firstname ? userData.firstname : userData.display_name}
+            </p>
           </div>
         )}
       </div>
