@@ -197,6 +197,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState(null);
 
   const revealPassword = () => {
@@ -254,6 +255,7 @@ const Login = () => {
 
   const googlePopupAuthenticate = async () => {
     setErrors(null);
+    setGoogleLoading(true);
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then(async (usercredentials) => {
@@ -261,6 +263,7 @@ const Login = () => {
         const doc_ref = doc(db, "users", usercredentials.user.email);
         const querysnapshot = await getDoc(doc_ref);
         if (querysnapshot.exists()) {
+          setGoogleLoading(false);
           localStorage.setItem("hiresset_email", querysnapshot.data().email);
           localStorage.setItem("hiresset_uid", querysnapshot.data().uid);
           localStorage.setItem(
@@ -275,6 +278,7 @@ const Login = () => {
         } else {
           setErrors("No account with this details exists.");
           usercredentials.user.delete();
+          setGoogleLoading(false);
         }
       })
       .catch((err) => {
@@ -369,12 +373,16 @@ const Login = () => {
           <div className={classes.google_btn_container}>
             <div
               className={classes.google_btn}
-              onClick={() => googlePopupAuthenticate()}
+              onClick={() => {
+                googlePopupAuthenticate();
+              }}
             >
               <div className={classes.google_icon_container}>
                 <FcGoogle />
               </div>
-              <p className={classes.google_text}>Continue with Google</p>
+              <p className={classes.google_text}>
+                {googleLoading ? "Logging in..." : "Continue with Google"}
+              </p>
               <div className={classes.hidden_div} />
             </div>
           </div>

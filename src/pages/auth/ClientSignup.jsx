@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AuthHeader from "../../components/auth/AuthHeader";
 import { makeStyles } from "@material-ui/styles";
 import { FcGoogle } from "react-icons/fc";
@@ -9,6 +9,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signInWithRedirect,
+  getRedirectResult,
 } from "firebase/auth";
 import { setDoc, doc } from "firebase/firestore";
 import db, { auth } from "../../store/server.config";
@@ -202,6 +203,7 @@ const ClientSignup = () => {
   const [password, setPassword] = useState("");
   const [nationality, setNationality] = useState("");
   const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
   const [errors, setErrors] = useState(null);
   const [termsChecked, setTermsChecked] = useState(false);
 
@@ -267,6 +269,7 @@ const ClientSignup = () => {
 
   const googlePopupAuthenticate = async () => {
     setErrors(null);
+    setGoogleLoading(true);
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then((usercredentials) => {
@@ -286,26 +289,13 @@ const ClientSignup = () => {
             firstname: usercredentials.user.displayName,
           },
         });
+        setGoogleLoading(false);
       })
       .catch((err) => {
         console.log(err.message);
         if (err.message === "Firebase: Error (auth/popup-closed-by-user).") {
           setErrors("Google Authentication interrupted. Please try again.");
-        }
-      });
-  };
-
-  const googleRedirectAuthenticate = async () => {
-    setErrors(null);
-    const provider = new GoogleAuthProvider();
-    await signInWithRedirect(auth, provider)
-      .then((usercredentials) => {
-        console.log(usercredentials);
-      })
-      .catch((err) => {
-        console.log(err.message);
-        if (err.message === "Firebase: Error (auth/popup-closed-by-user).") {
-          setErrors("Google Authentication interrupted. Please try again.");
+          setGoogleLoading(false);
         }
       });
   };
@@ -323,17 +313,15 @@ const ClientSignup = () => {
             <div
               className={classes.google_btn}
               onClick={() => {
-                if (window.innerWidth < 700) {
-                  googleRedirectAuthenticate();
-                } else {
-                  googlePopupAuthenticate();
-                }
+                googlePopupAuthenticate();
               }}
             >
               <div className={classes.google_icon_container}>
                 <FcGoogle />
               </div>
-              <p className={classes.google_text}>Continue with Google</p>
+              <p className={classes.google_text}>
+                {googleLoading ? "Creating account..." : "Continue with Google"}
+              </p>
               <div className={classes.hidden_div} />
             </div>
           </div>

@@ -21,8 +21,7 @@ const useStyles = makeStyles((theme) => ({
       width: 100,
     },
   },
-  desktop_link_container: {
-  },
+  desktop_link_container: {},
   btn: {
     padding: "10px 30px",
     border: "none",
@@ -33,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     width: "100%",
     [theme.breakpoints.down("xs")]: {
-        fontSize: 12
-    }
+      fontSize: 12,
+    },
   },
 }));
 
