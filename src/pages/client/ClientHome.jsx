@@ -8,7 +8,26 @@ import { GlobalContext } from "../../store/Context";
 import ClientPostings from "../../components/client_home/ClientPostings";
 import MainFooter from "../../components/main/MainFooter";
 
-const useStyles = makeStyles((theme) => ({}));
+const useStyles = makeStyles((theme) => ({
+  loader_image: {
+    width: 200,
+    [theme.breakpoints.down("xs")]: {
+      width: 150,
+    },
+  },
+  container: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  inner_flex: {
+    marginTop: 200,
+  },
+  loader_image_container: {
+    display: 'flex',
+    justifyContent: 'center'
+  }
+}));
 
 const ClientHome = () => {
   const classes = useStyles();
@@ -33,7 +52,18 @@ const ClientHome = () => {
     <div>
       <div>
         {userData === null ? (
-          <p>Hireset Loading Animation...</p>
+          <div className={classes.container}>
+            <div className={classes.inner_flex}>
+              <div className={classes.loader_image_container}>
+                <img
+                  src="main-logo.png"
+                  alt=""
+                  className={classes.loader_image}
+                />
+              </div>
+              <p>Hireset Loading Animation...</p>
+            </div>
+          </div>
         ) : (
           <div>
             <MainHeader />

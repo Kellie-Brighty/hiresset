@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { GlobalContext } from "../../store/Context";
+import { useNavigate } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -8,8 +9,8 @@ const useStyles = makeStyles((theme) => ({
     maxWidth: 1400,
     margin: "auto",
     [theme.breakpoints.down("xs")]: {
-      marginTop: 30
-    }
+      marginTop: 30,
+    },
   },
   inner_flex: {
     display: "flex",
@@ -17,24 +18,24 @@ const useStyles = makeStyles((theme) => ({
     padding: "0px 200px",
     justifyContent: "space-between",
     [theme.breakpoints.down("xs")]: {
-      padding: '0px 20px',
-      alignItems: "stretch"
-    }
+      padding: "0px 20px",
+      alignItems: "stretch",
+    },
   },
   title: {
     fontSize: 25,
     fontWeight: "bold",
     [theme.breakpoints.down("xs")]: {
-      fontSize: 18
-    }
+      fontSize: 18,
+    },
   },
   name: {
     fontSize: 16,
     fontWeight: "bold",
     marginTop: 10,
     [theme.breakpoints.down("xs")]: {
-      fontSize: 14
-    }
+      fontSize: 14,
+    },
   },
   button_section: {
     display: "flex",
@@ -42,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
     width: 650,
     justifyContent: "space-between",
     [theme.breakpoints.down("xs")]: {
-      display: 'none'
-    }
+      display: "none",
+    },
   },
   btn: {
     padding: "10px 20px",
@@ -79,12 +80,16 @@ const useStyles = makeStyles((theme) => ({
     "& span": {
       fontWeight: "bold",
     },
+    [theme.breakpoints.up("md")]: {
+      display: 'none'
+    }
   },
 }));
 
 const ClientHomeHeader = () => {
   const classes = useStyles();
   const { userDetails } = useContext(GlobalContext);
+  const navigate = useNavigate();
 
   return (
     <header className={classes.header}>
@@ -106,7 +111,12 @@ const ClientHomeHeader = () => {
             >
               Browse Project Category
             </button>
-            <button className={classes.btn}>Post a Job</button>
+            <button
+              className={classes.btn}
+              onClick={() => navigate("/getting_started")}
+            >
+              Post a Job
+            </button>
           </div>
           <p className={classes.balance}>
             Available Balance: <span>$20.23</span>

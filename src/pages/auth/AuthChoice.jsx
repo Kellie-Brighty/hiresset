@@ -13,8 +13,8 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     justifyContent: "center",
     [theme.breakpoints.down("xs")]: {
-      marginBottom: "50px"
-    }
+      marginBottom: "50px",
+    },
   },
   content_box: {
     border: `0.5px solid #ccc`,
@@ -88,8 +88,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 20,
     fontSize: 22,
     [theme.breakpoints.down("xs")]: {
-      fontSize: 18
-    }
+      fontSize: 18,
+    },
   },
   btn_container: {
     display: "flex",
@@ -120,8 +120,8 @@ const useStyles = makeStyles((theme) => ({
   already_container: {
     textAlign: "center",
     [theme.breakpoints.down("xs")]: {
-      marginTop: 30
-    }
+      marginTop: 30,
+    },
   },
   login_link: {
     color: "blue",
@@ -136,7 +136,7 @@ const AuthChoice = () => {
 
   return (
     <div>
-     <AuthHeader />
+      <AuthHeader />
       <div className={classes.inner_flex}>
         <div className={classes.content_box}>
           <p className={classes.content_title}>

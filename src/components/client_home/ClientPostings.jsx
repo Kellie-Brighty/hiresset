@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core";
 import { BsThreeDots } from "react-icons/bs";
+import { useNavigate } from "react-router";
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -25,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
       border: `0.5px solid #ccc`,
       marginTop: 5,
       borderRadius: 10,
-      marginBottom: 50
+      marginBottom: 50,
     },
   },
   content_header: {
@@ -140,19 +141,21 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       display: "none",
     },
-    textAlign: 'center',
+    textAlign: "center",
     padding: "20px 0px",
-    borderTop: '0.5px solid #ccc',
-    marginTop: 20
+    borderTop: "0.5px solid #ccc",
+    marginTop: 20,
   },
   mobile_see_postings: {
     textDecoration: "underline",
-    color: theme.palette.primary.main
-  }
+    color: theme.palette.primary.main,
+  },
 }));
 
 const ClientPostings = () => {
   const classes = useStyles();
+  const navigate = useNavigate();
+
   return (
     <div className={classes.container}>
       <div className={classes.inner_flex}>
@@ -209,7 +212,14 @@ const ClientPostings = () => {
             >
               Projects
             </button>
-            <button className={classes.btn}>Post a Job</button>
+            <button
+              className={classes.btn}
+              onClick={() => {
+                navigate("/getting_started");
+              }}
+            >
+              Post a Job
+            </button>
           </footer>
         </div>
       </div>

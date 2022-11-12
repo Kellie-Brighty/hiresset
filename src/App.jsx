@@ -15,6 +15,7 @@ import LogoutSuccess from "./pages/LogoutSuccess";
 import ClientProtection from "./util/ClientProtection";
 import TalentProtection from "./util/TalentProtection";
 import { GlobalProvider } from "./store/Context";
+import GettingStarted from "./pages/client/job_posting_process/GettingStarted";
 
 const App = () => {
   const user_type = localStorage.getItem("hiresset_user_type");
@@ -74,6 +75,7 @@ const App = () => {
           />
           <Route path="/email_verify" element={<EmailVerify />} />
           <Route path="/logout_success" element={<LogoutSuccess />} />
+          <Route path="/getting_started" element={<GettingStarted />} />
         </Routes>
       </Router>
     </GlobalProvider>

@@ -150,12 +150,6 @@ const MainFooter = () => {
     "Success Stories",
     "Project Catalog",
     "Talent Scout",
-    "Hire an Agency",
-    "Enterprise",
-    "Payroll Services",
-    "Direct Contracts",
-    "Hire Worldwide",
-    "Hire in the USA",
   ];
 
   const companyOptions = [
@@ -164,10 +158,7 @@ const MainFooter = () => {
     "Investor Relations",
     "Careers",
     "Our Impact",
-    "Press",
-    "Contact Us",
-    "Trust, Safety & Security",
-    "Modern Slavery Statement",
+
   ];
 
   const trademarkOptions = [
