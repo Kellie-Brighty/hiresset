@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   content_title: {
-    fontFamily: "Mirza",
+    fontFamily: "Marcellus",
     fontSize: 45,
     textAlign: "center",
     [theme.breakpoints.down("xs")]: {

@@ -32,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
       border: `0.5px solid #ccc`,
       marginTop: 5,
       borderRadius: 10,
-      marginBottom: 50,
+      marginBottom: 100,
     },
   },
   content_title: {
@@ -275,7 +275,11 @@ const GettingStarted = () => {
                     Continue
                   </button>
                 ) : (
-                  <button className={classes.btn} style={{ marginRight: 10 }}>
+                  <button
+                    className={classes.btn}
+                    style={{ marginRight: 10 }}
+                    onClick={() => navigate("/title")}
+                  >
                     Continue
                   </button>
                 )}
@@ -300,7 +304,11 @@ const GettingStarted = () => {
                   Continue
                 </button>
               ) : (
-                <button className={classes.btn} style={{ marginRight: 10 }}>
+                <button
+                  className={classes.btn}
+                  style={{ marginRight: 10 }}
+                  onClick={() => navigate("/title")}
+                >
                   Continue
                 </button>
               )}

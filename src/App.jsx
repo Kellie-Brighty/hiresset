@@ -16,6 +16,7 @@ import ClientProtection from "./util/ClientProtection";
 import TalentProtection from "./util/TalentProtection";
 import { GlobalProvider } from "./store/Context";
 import GettingStarted from "./pages/client/job_posting_process/GettingStarted";
+import JobTitle from "./pages/client/job_posting_process/JobTitle";
 
 const App = () => {
   const user_type = localStorage.getItem("hiresset_user_type");
@@ -76,6 +77,7 @@ const App = () => {
           <Route path="/email_verify" element={<EmailVerify />} />
           <Route path="/logout_success" element={<LogoutSuccess />} />
           <Route path="/getting_started" element={<GettingStarted />} />
+          <Route path="/title" element={<JobTitle />} />
         </Routes>
       </Router>
     </GlobalProvider>

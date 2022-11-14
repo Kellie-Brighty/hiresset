@@ -24,9 +24,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: 200,
   },
   loader_image_container: {
-    display: 'flex',
-    justifyContent: 'center'
-  }
+    display: "flex",
+    justifyContent: "center",
+  },
 }));
 
 const ClientHome = () => {

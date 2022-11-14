@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   right_side_maintext: {
-    fontFamily: "Mirza",
+    fontFamily: "Marcellus",
     fontSize: 80,
     lineHeight: 0.9,
     [theme.breakpoints.down("xs")]: {
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     [theme.breakpoints.down("xs")]: {
       fontSize: 16,
-      marginTop: 10
+      marginTop: 10,
     },
   },
   left_side: {
@@ -70,8 +70,8 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 4,
     cursor: "pointer",
     [theme.breakpoints.down("xs")]: {
-      marginTop: -40
-    }
+      marginTop: -40,
+    },
   },
 }));
 

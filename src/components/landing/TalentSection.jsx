@@ -13,25 +13,25 @@ const useStyles = makeStyles((theme) => ({
     height: 493,
     borderRadius: 10,
     [theme.breakpoints.down("xs")]: {
-      flexDirection: 'column',
-      gap: 0
-    }
+      flexDirection: "column",
+      gap: 0,
+    },
   },
   image_container: {
     height: "100%",
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     [theme.breakpoints.down("xs")]: {
-      borderRadius: 0
-    }
+      borderRadius: 0,
+    },
   },
   image: {
     borderTopLeftRadius: 10,
     borderBottomLeftRadius: 10,
     [theme.breakpoints.down("xs")]: {
-      width: '100%',
-      borderRadius: 0
-    }
+      width: "100%",
+      borderRadius: 0,
+    },
   },
   text_container: {
     height: "100%",
@@ -39,21 +39,21 @@ const useStyles = makeStyles((theme) => ({
     borderTopRightRadius: 10,
     borderBottomRightRadius: 10,
     padding: "0px 20px",
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
     [theme.breakpoints.down("xs")]: {
-      borderRadius: 0
-    }
+      borderRadius: 0,
+    },
   },
   title: {
     color: theme.palette.primary.white,
     fontSize: 50,
-    fontFamily: "Mirza",
+    fontFamily: "Marcellus",
     lineHeight: 0.9,
     [theme.breakpoints.down("xs")]: {
-      fontSize: 30
-    }
+      fontSize: 30,
+    },
   },
   subtitle: {
     color: theme.palette.primary.white,
@@ -67,11 +67,11 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: 4,
     cursor: "pointer",
     outline: "none",
-    fontWeight: 'bold',
+    fontWeight: "bold",
     [theme.breakpoints.down("xs")]: {
       fontSize: 12,
-      fontWeight: 'bold'
-    }
+      fontWeight: "bold",
+    },
   },
 }));
 

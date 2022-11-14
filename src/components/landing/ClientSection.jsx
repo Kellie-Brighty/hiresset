@@ -52,7 +52,7 @@ const useStyles = makeStyles((theme) => ({
   client_title: {
     color: theme.palette.primary.white,
     fontSize: 72,
-    fontFamily: "Mirza",
+    fontFamily: "Marcellus",
     lineHeight: 0.9,
     [theme.breakpoints.down("xs")]: {
       fontSize: 30,

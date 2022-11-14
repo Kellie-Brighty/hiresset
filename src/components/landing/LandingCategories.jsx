@@ -10,7 +10,7 @@ const useStyles = makeStyles((theme) => ({
     padding: "0px 20px",
   },
   title: {
-    fontFamily: "Mirza",
+    fontFamily: "Marcellus",
     fontSize: 55,
     [theme.breakpoints.down("xs")]: {
       fontSize: 25,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
     },
     [theme.breakpoints.down("xs")]: {
       width: "100%",
-      padding: 0
+      padding: 0,
     },
   },
   subs: {
