@@ -68,7 +68,9 @@ const useStyles = makeStyles((theme) => ({
   right: {
     [theme.breakpoints.down("xs")]: {
       margin: "20px 0px",
+      width: 350,
     },
+    width: 450,
   },
   right_title: {
     fontSize: 18,
@@ -275,7 +277,7 @@ const JobTitle = () => {
                   <button
                     className={classes.btn}
                     style={{ marginRight: 10 }}
-                    onClick={() => navigate("/title")}
+                    onClick={() => navigate("/skills")}
                   >
                     Next: Skills
                   </button>
@@ -302,7 +304,7 @@ const JobTitle = () => {
                 <button
                   className={classes.btn}
                   style={{ marginRight: 10 }}
-                  onClick={() => navigate("/title")}
+                  onClick={() => navigate("/skills")}
                 >
                   Next: Skills
                 </button>

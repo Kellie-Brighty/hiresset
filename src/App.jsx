@@ -17,6 +17,9 @@ import TalentProtection from "./util/TalentProtection";
 import { GlobalProvider } from "./store/Context";
 import GettingStarted from "./pages/client/job_posting_process/GettingStarted";
 import JobTitle from "./pages/client/job_posting_process/JobTitle";
+import Skills from "./pages/client/job_posting_process/Skills";
+import Scope from "./pages/client/job_posting_process/Scope";
+import Budget from "./pages/client/job_posting_process/Budget";
 
 const App = () => {
   const user_type = localStorage.getItem("hiresset_user_type");
@@ -78,6 +81,9 @@ const App = () => {
           <Route path="/logout_success" element={<LogoutSuccess />} />
           <Route path="/getting_started" element={<GettingStarted />} />
           <Route path="/title" element={<JobTitle />} />
+          <Route path="/skills" element={<Skills />} />
+          <Route path="/scope" element={<Scope />} />
+          <Route path="/budget" element={<Budget />} />
         </Routes>
       </Router>
     </GlobalProvider>
