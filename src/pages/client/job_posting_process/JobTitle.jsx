@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
     border: `0.5px solid #ccc`,
     padding: 30,
     borderRadius: 20,
-    marginTop: 30,
+    margin: "30px 0px",
     [theme.breakpoints.down("xs")]: {
       padding: 10,
       border: `none`,
@@ -58,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
   divider: {
     width: 0.5,
-    height: 300,
+    height: 600,
     background: "#ccc",
     margin: "0px 50px",
     [theme.breakpoints.down("xs")]: {
@@ -83,6 +83,9 @@ const useStyles = makeStyles((theme) => ({
     padding: "10px 20px",
     borderRadius: 5,
     border: "2px solid #ccc",
+  },
+  example_container: {
+    marginTop: 20,
   },
   examples: {
     marginTop: 20,
@@ -134,7 +137,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 16,
     borderRadius: 4,
     cursor: "pointer",
-    // width: "100%",
+    width: 200,
     [theme.breakpoints.down("xs")]: {
       width: "50%",
     },
@@ -191,18 +194,44 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 25,
     cursor: "pointer",
   },
+  job_description_container: {
+    margin: "40px 0px",
+  },
+  describe_body_text: {
+    fontSize: 14,
+    color: theme.palette.secondary.main,
+    margin: "10px 0px",
+  },
+  describe_input: {
+    outline: "none",
+    marginTop: 10,
+    width: 300,
+    padding: "10px 20px",
+    borderRadius: 5,
+    border: "2px solid #ccc",
+  },
 }));
 
 const JobTitle = () => {
   const classes = useStyles();
+  const savedTitle = localStorage.getItem("job_title");
   const [title, setTitle] = useState(null);
+  const [description, setDescription] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     if (title === "") {
       setTitle(null);
     }
-  }, [title]);
+
+    if (description === "") {
+      setDescription(null);
+    }
+  }, [title, description]);
+
+  useEffect(() => {
+    savedTitle && setTitle(savedTitle);
+  }, []);
 
   return (
     <div>
@@ -214,7 +243,7 @@ const JobTitle = () => {
               <div className={classes.left}>
                 <p className={classes.title_stage}>1/4 Title</p>
                 <p className={classes.title_label}>
-                  Let's start with a strong title.
+                  Let's start with a strong title and interesting description.
                 </p>
                 <p className={classes.title_explain}>
                   This helps your job post stand out to the right candidates.
@@ -235,7 +264,7 @@ const JobTitle = () => {
                   onChange={(e) => setTitle(e.target.value)}
                 />
 
-                <div className={classes.examples}>
+                <div className={classes.example_container}>
                   <p className={classes.example_title}>Example titles</p>
                   <ul className={classes.example_list_container}>
                     <li className={classes.examples}>
@@ -250,6 +279,23 @@ const JobTitle = () => {
                       Facebook ad specialist needed for product launch
                     </li>
                   </ul>
+                </div>
+
+                <div className={classes.job_description_container}>
+                  <p className={classes.right_title}>Describe your job</p>
+                  <p className={classes.describe_body_text}>
+                    This is how talent figures out what you need and why you’re
+                    great to work with!
+                  </p>
+
+                  <textarea
+                    type="text"
+                    className={classes.describe_input}
+                    rows="10"
+                    value={description}
+                    onChange={(e) => setDescription(e.target.value)}
+                    placeholder="Already have a job description? paste it here..."
+                  />
                 </div>
               </div>
             </div>
@@ -273,11 +319,22 @@ const JobTitle = () => {
                   >
                     Next: Skills
                   </button>
+                ) : description === null ? (
+                  <button
+                    className={classes.btn_unselected}
+                    style={{ marginRight: 10 }}
+                  >
+                    Next: Skills
+                  </button>
                 ) : (
                   <button
                     className={classes.btn}
                     style={{ marginRight: 10 }}
-                    onClick={() => navigate("/skills")}
+                    onClick={() => {
+                      navigate("/skills");
+                      localStorage.setItem("job_title", title);
+                      localStorage.setItem("job_description", description);
+                    }}
                   >
                     Next: Skills
                   </button>
@@ -300,11 +357,22 @@ const JobTitle = () => {
                 >
                   Next: Skills
                 </button>
+              ) : description === null ? (
+                <button
+                  className={classes.btn_unselected}
+                  style={{ marginRight: 10 }}
+                >
+                  Next: Skills
+                </button>
               ) : (
                 <button
                   className={classes.btn}
                   style={{ marginRight: 10 }}
-                  onClick={() => navigate("/skills")}
+                  onClick={() => {
+                    navigate("/skills");
+                    localStorage.setItem("job_title", title);
+                    localStorage.setItem("job_description", description);
+                  }}
                 >
                   Next: Skills
                 </button>

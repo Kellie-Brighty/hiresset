@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme) => ({
       margin: "20px 0px",
       width: 350,
     },
-    width: 450
+    width: 450,
   },
   right_title: {
     fontSize: 18,
@@ -195,12 +195,13 @@ const useStyles = makeStyles((theme) => ({
     gridTemplateColumns: "repeat(3, 1fr)",
     gridTemplateRows: "repeat(2, 1fr)",
     gridGap: 5,
-    margin: '10px 0px'
+    margin: "10px 0px",
   },
 }));
 
 const Skills = () => {
   const classes = useStyles();
+  const savedSkills = JSON.parse(localStorage.getItem("selected_skills"));
   const [skill, setSkill] = useState(null);
   const navigate = useNavigate();
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -210,6 +211,10 @@ const Skills = () => {
       setSkill(null);
     }
   }, [skill]);
+
+  useEffect(() => {
+    savedSkills && setSelectedSkills(savedSkills);
+  }, []);
 
   const onSearch = (searchTerm) => {
     setSkill("");
@@ -343,7 +348,13 @@ const Skills = () => {
                   <button
                     className={classes.btn}
                     style={{ marginRight: 10 }}
-                    onClick={() => navigate("/scope")}
+                    onClick={() => {
+                      navigate("/scope");
+                      localStorage.setItem(
+                        "selected_skills",
+                        JSON.stringify(selectedSkills)
+                      );
+                    }}
                   >
                     Next: Scope
                   </button>
@@ -370,7 +381,13 @@ const Skills = () => {
                 <button
                   className={classes.btn}
                   style={{ marginRight: 10 }}
-                  onClick={() => navigate("/scope")}
+                  onClick={() => {
+                    navigate("/scope");
+                    localStorage.setItem(
+                      "selected_skills",
+                      JSON.stringify(selectedSkills)
+                    );
+                  }}
                 >
                   Next: Scope
                 </button>

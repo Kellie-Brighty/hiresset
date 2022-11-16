@@ -20,6 +20,7 @@ import JobTitle from "./pages/client/job_posting_process/JobTitle";
 import Skills from "./pages/client/job_posting_process/Skills";
 import Scope from "./pages/client/job_posting_process/Scope";
 import Budget from "./pages/client/job_posting_process/Budget";
+import ReviewPost from "./pages/client/job_posting_process/ReviewPost";
 
 const App = () => {
   const user_type = localStorage.getItem("hiresset_user_type");
@@ -84,6 +85,7 @@ const App = () => {
           <Route path="/skills" element={<Skills />} />
           <Route path="/scope" element={<Scope />} />
           <Route path="/budget" element={<Budget />} />
+          <Route path="/review_job_post" element={<ReviewPost />} />
         </Routes>
       </Router>
     </GlobalProvider>

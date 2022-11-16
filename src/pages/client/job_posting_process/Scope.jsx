@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MainHeader from "../../../components/main/MainHeader";
 import {
@@ -189,6 +189,10 @@ const Scope = () => {
   const [experienceVal, setExperienceVal] = useState("entry");
   const navigate = useNavigate();
 
+  const savedScope = localStorage.getItem("job_scope_type");
+  const savedMonth = localStorage.getItem("job_months");
+  const savedExperience = localStorage.getItem("job_experience_type");
+
   const handleChange = (e) => {
     setValue(e.target.value);
   };
@@ -200,6 +204,70 @@ const Scope = () => {
   const handleExperienceChange = (e) => {
     setExperienceVal(e.target.value);
   };
+
+  useEffect(() => {
+    if (value === "medium") {
+      localStorage.setItem("job_scope_type", "Medium");
+      localStorage.setItem(
+        "job_scope_text",
+        "Well-defined projects (ex. design business rebrand package (i.e., logos, icons))"
+      );
+    } else if (value === "large") {
+      localStorage.setItem("job_scope_type", "Large");
+      localStorage.setItem(
+        "job_scope_text",
+        "Longer term or complex initiatives (ex. develop and execute a brand strategy (i.e., graphics, positioning))"
+      );
+    } else if (value === "small") {
+      localStorage.setItem("job_scope_type", "Small");
+      localStorage.setItem(
+        "job_scope_text",
+        "Quick and straightforward tasks (ex. create logo for a new product)"
+      );
+    }
+
+    if (timeValue === "more-than-six") {
+      localStorage.setItem("job_months", "More than 6 months");
+    } else if (timeValue === "three-to-six") {
+      localStorage.setItem("job_months", "3 to 6 months");
+    } else if (timeValue === "one-to-three") {
+      localStorage.setItem("job_months", "1 to 3 months");
+    }
+
+    if (experienceVal === "entry") {
+      localStorage.setItem("job_experience_type", "Entry");
+      localStorage.setItem(
+        "job_experience_text",
+        "Looking for someone relatively new to this field"
+      );
+    } else if (experienceVal === "intermediate") {
+      localStorage.setItem("job_experience_type", "Intermediate");
+      localStorage.setItem(
+        "job_experience_text",
+        "Looking for substantial experience in this field"
+      );
+    } else if (experienceVal === "expert") {
+      localStorage.setItem("job_experience_type", "Expert");
+      localStorage.setItem(
+        "job_experience_text",
+        "Looking for comprehensive and deep expertise in this field"
+      );
+    }
+  }, [value, timeValue, experienceVal]);
+
+  useEffect(() => {
+    savedScope && setValue(savedScope.toLocaleLowerCase());
+    savedMonth && savedMonth === "More than 6 months"
+      ? setTimeValue("more-than-six")
+      : savedMonth === "3 to 6 months"
+      ? setTimeValue("three-to-six")
+      : setTimeValue("one-to-three");
+    savedExperience && savedExperience === "Entry"
+      ? setExperienceVal("entry")
+      : savedExperience === "Intermediate"
+      ? setExperienceVal("intermediate")
+      : setExperienceVal("expert");
+  }, []);
 
   return (
     <div>

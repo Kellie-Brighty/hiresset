@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MainHeader from "../../../components/main/MainHeader";
 import { AiOutlineFieldTime } from "react-icons/ai";
@@ -187,8 +187,17 @@ const useStyles = makeStyles((theme) => ({
 
 const GettingStarted = () => {
   const classes = useStyles();
+  const savedTime = localStorage.getItem("job_timeframe");
   const [time, setTime] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    savedTime && savedTime === "Longer term or full time work"
+      ? setTime("long")
+      : savedTime === "Short term or part time work"
+      ? setTime("short")
+      : setTime(null);
+  }, []);
 
   return (
     <div>
@@ -206,14 +215,20 @@ const GettingStarted = () => {
               <div className={classes.option_boxes}>
                 <div
                   className={
-                    time === "long" ? classes.selected_box : classes.box
+                    time === "short" ? classes.selected_box : classes.box
                   }
-                  onClick={() => setTime("long")}
+                  onClick={() => {
+                    setTime("short");
+                    localStorage.setItem(
+                      "job_timeframe",
+                      "Short term or part time work"
+                    );
+                  }}
                   style={{ margin: 0 }}
                 >
                   <div className={classes.box_header}>
                     <AiOutlineFieldTime className={classes.box_icons_one} />
-                    {time === "long" ? (
+                    {time === "short" ? (
                       <GrRadialSelected
                         className={classes.box_icons_selected}
                       />
@@ -231,13 +246,19 @@ const GettingStarted = () => {
 
                 <div
                   className={
-                    time === "short" ? classes.selected_box : classes.box
+                    time === "long" ? classes.selected_box : classes.box
                   }
-                  onClick={() => setTime("short")}
+                  onClick={() => {
+                    setTime("long");
+                    localStorage.setItem(
+                      "job_timeframe",
+                      "Longer term or full time work"
+                    );
+                  }}
                 >
                   <div className={classes.box_header}>
                     <FaRegCalendarAlt className={classes.box_icons_one} />
-                    {time === "short" ? (
+                    {time === "long" ? (
                       <GrRadialSelected
                         className={classes.box_icons_selected}
                       />
@@ -263,6 +284,14 @@ const GettingStarted = () => {
                   onClick={() => {
                     setTime(null);
                     navigate("/");
+                    localStorage.removeItem("job_timeframe");
+                    localStorage.removeItem("job_title");
+                    localStorage.removeItem("selected_skills");
+                    localStorage.removeItem("job_scope_type");
+                    localStorage.removeItem("job_scope_text");
+                    localStorage.removeItem("job_months");
+                    localStorage.removeItem("job_experience_type");
+                    localStorage.removeItem("job_experience_text");
                   }}
                 >
                   Cancel
@@ -292,6 +321,14 @@ const GettingStarted = () => {
                 onClick={() => {
                   setTime(null);
                   navigate("/");
+                  localStorage.removeItem("job_timeframe");
+                  localStorage.removeItem("job_title");
+                  localStorage.removeItem("selected_skills");
+                  localStorage.removeItem("job_scope_type");
+                  localStorage.removeItem("job_scope_text");
+                  localStorage.removeItem("job_months");
+                  localStorage.removeItem("job_experience_type");
+                  localStorage.removeItem("job_experience_text");
                 }}
               >
                 Cancel

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import MainHeader from "../../../components/main/MainHeader";
 import { AiOutlineFieldTime } from "react-icons/ai";
@@ -259,10 +259,10 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
   },
   quote_text: {
-    margin: '10px 0px',
+    margin: "10px 0px",
     color: theme.palette.secondary.main,
-    fontSize: 14
-  }
+    fontSize: 14,
+  },
 }));
 
 const Budget = () => {
@@ -271,6 +271,16 @@ const Budget = () => {
   const [fixed, setFixed] = useState("");
   const [hourly, setHourly] = useState("");
   const navigate = useNavigate();
+
+  const savedJobType = localStorage.getItem("job_budget_type");
+
+  useEffect(() => {
+    savedJobType && savedJobType === "Hourly Rate"
+      ? setSlectedVal("hourly")
+      : savedJobType === "Fixed Project Budget"
+      ? setSlectedVal("fixed")
+      : setSlectedVal(null);
+  }, []);
 
   return (
     <div>
@@ -299,7 +309,10 @@ const Budget = () => {
                         ? classes.selected_box
                         : classes.box
                     }
-                    onClick={() => setSlectedVal("hourly")}
+                    onClick={() => {
+                      setSlectedVal("hourly");
+                      localStorage.setItem("job_budget_type", "Hourly Rate");
+                    }}
                     style={{ margin: 0 }}
                   >
                     <div className={classes.box_header}>
@@ -323,7 +336,13 @@ const Budget = () => {
                         ? classes.selected_box
                         : classes.box
                     }
-                    onClick={() => setSlectedVal("fixed")}
+                    onClick={() => {
+                      setSlectedVal("fixed");
+                      localStorage.setItem(
+                        "job_budget_type",
+                        "Fixed Project Budget"
+                      );
+                    }}
                   >
                     <div className={classes.box_header}>
                       <MdPriceChange className={classes.box_icons_one} />
@@ -412,7 +431,14 @@ const Budget = () => {
                   <button
                     className={classes.btn}
                     style={{ marginRight: 10 }}
-                    onClick={() => navigate("/budget")}
+                    onClick={() => {
+                      if (selectedval === "hourly") {
+                        localStorage.setItem("job_budget_price", hourly);
+                      } else {
+                        localStorage.setItem("job_budget_price", fixed);
+                      }
+                      navigate("/review_job_post");
+                    }}
                   >
                     Next: Review Job Post
                   </button>
@@ -445,7 +471,14 @@ const Budget = () => {
                 <button
                   className={classes.btn}
                   style={{ marginRight: 10 }}
-                  onClick={() => navigate("/budget")}
+                  onClick={() => {
+                    if (selectedval === "hourly") {
+                      localStorage.setItem("job_budget_price", hourly);
+                    } else {
+                      localStorage.setItem("job_budget_price", fixed);
+                    }
+                    navigate("/review_job_post");
+                  }}
                 >
                   Next: Review Job Post
                 </button>
