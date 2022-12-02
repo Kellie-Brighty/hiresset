@@ -5,7 +5,8 @@ export const themes = createTheme({
     primary: {
       main: "#e3682b",
       white: "#fff",
-      footer: "#a63700"
+      footer: "#a63700",
+      card_background: "#e3682b2c"
     },
     secondary: {
       main: "#808080",

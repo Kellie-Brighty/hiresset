@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router";
 import { makeStyles } from "@material-ui/core";
+import { auth } from "../../store/server.config";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -59,6 +60,7 @@ const MainHeader = () => {
         <button
           className={classes.btn}
           onClick={() => {
+            auth.signOut();
             localStorage.clear();
             navigate("/logout_success");
           }}

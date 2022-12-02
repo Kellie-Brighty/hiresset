@@ -229,7 +229,9 @@ const Login = () => {
                 navigate("/client_home");
               } else {
                 localStorage.setItem("hiresset_user_type", "talent");
-                navigate("/talent_home");
+                snapshot.data().description
+                  ? navigate("/talent_home")
+                  : navigate("/talent_get_started");
               }
             });
           })
@@ -271,9 +273,13 @@ const Login = () => {
             querysnapshot.data().user_type
           );
           if (querysnapshot.data().user_type === "client") {
+            localStorage.setItem("hiresset_user_type", "client");
             navigate("/client_home");
           } else {
-            navigate("/talent_home");
+            localStorage.setItem("hiresset_user_type", "talent");
+            querysnapshot.data().description
+                  ? navigate("/talent_home")
+                  : navigate("/talent_get_started");
           }
         } else {
           setErrors("No account with this details exists.");

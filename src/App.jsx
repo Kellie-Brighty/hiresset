@@ -21,6 +21,12 @@ import Skills from "./pages/client/job_posting_process/Skills";
 import Scope from "./pages/client/job_posting_process/Scope";
 import Budget from "./pages/client/job_posting_process/Budget";
 import ReviewPost from "./pages/client/job_posting_process/ReviewPost";
+import TalentGetStarted from "./pages/talent/TalentGetStarted";
+import TalentProjects from "./pages/talent/TalentProjects";
+import TalentClients from "./pages/talent/TalentClients";
+import TalentActivities from "./pages/talent/TalentActivities";
+import TalentPayment from "./pages/talent/TalentPayment";
+import TalentSettings from "./pages/talent/TalentSettings";
 
 const App = () => {
   const user_type = localStorage.getItem("hiresset_user_type");
@@ -86,6 +92,12 @@ const App = () => {
           <Route path="/scope" element={<Scope />} />
           <Route path="/budget" element={<Budget />} />
           <Route path="/review_job_post" element={<ReviewPost />} />
+          <Route path="/talent_get_started" element={<TalentGetStarted />} />
+          <Route path="/talent_projects" element={<TalentProjects />} />
+          <Route path="/talent_clients" element={<TalentClients />} />
+          <Route path="/talent_activity" element={<TalentActivities />} />
+          <Route path="/talent_payment" element={<TalentPayment />} />
+          <Route path="/talent_settings" element={<TalentSettings />} />
         </Routes>
       </Router>
     </GlobalProvider>
