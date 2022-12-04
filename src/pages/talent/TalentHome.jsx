@@ -7,6 +7,8 @@ import { MdNotifications } from "react-icons/md";
 import { FaUserCircle } from "react-icons/fa";
 import moment from "moment/moment";
 import { AiFillCloseCircle } from "react-icons/ai";
+import ProjectOverview from "./talent_components/ProjectOverview";
+import UpcomingDeadlines from "./talent_components/UpcomingDeadlines";
 
 const useStyles = makeStyles((theme) => ({
   loader_image: {
@@ -53,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
   },
   notification_container: {
-    background: theme.palette.primary.card_background,
+    background: theme.palette.primary.light_card_background,
     padding: 10,
     borderRadius: 10,
     position: "relative",
@@ -77,7 +79,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     alignItems: "center",
     margin: "0px 15px",
-    background: theme.palette.primary.card_background,
+    background: theme.palette.primary.light_card_background,
     padding: 10,
     borderRadius: 10,
     cursor: "pointer",
@@ -111,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 18,
   },
   notif_box: {
-    background: theme.palette.primary.card_background,
+    background: theme.palette.primary.light_card_background,
     margin: "15px 0px",
     padding: 10,
     borderRadius: 10,
@@ -126,6 +128,21 @@ const useStyles = makeStyles((theme) => ({
   notif_title: {
     fontSize: 20,
     fontWeight: "bold",
+  },
+  body: {
+    padding: 20,
+    display: "flex",
+  },
+  left_body: {
+    flex: "50%",
+    marginRight: 30,
+  },
+  right_body: {
+    flexBasis: "40%",
+    background: theme.palette.primary.card_background,
+    padding: "40px 30px",
+    borderRadius: 10,
+    width: 200
   },
 }));
 
@@ -306,6 +323,16 @@ const TalentHome = () => {
                   <MenuItem onClick={handleClose}>My account</MenuItem>
                   <MenuItem onClick={handleClose}>Logout</MenuItem>
                 </Menu>
+              </div>
+
+              <div className={classes.body}>
+                <div className={classes.left_body}>
+                  <ProjectOverview />
+                </div>
+
+                <div className={classes.right_body}>
+                  <UpcomingDeadlines />
+                </div>
               </div>
             </div>
           )}
